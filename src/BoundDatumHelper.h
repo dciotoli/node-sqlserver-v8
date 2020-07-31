@@ -169,7 +169,7 @@ namespace mssql
 					if (_isnan(d)) ++nanCount;
 					#endif
 					#ifdef LINUX_BUILD
-					if (isnan(d)) ++nanCount;
+					if (std::isnan(d)) ++nanCount;
 					#endif
 					#ifdef WINDOWS_BUILD
 					else if (!_finite(d)) ++infiniteCount;
