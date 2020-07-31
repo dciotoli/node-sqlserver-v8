@@ -19,7 +19,7 @@
 
 #include "stdafx.h"
 #include <locale>
-#include <codecvt>
+/* #include <codecvt> */
 #include <OdbcConnection.h>
 #include <OdbcStatementCache.h>
 #include <OdbcOperation.h>
