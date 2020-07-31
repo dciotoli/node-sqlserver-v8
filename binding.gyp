@@ -6,8 +6,8 @@
       'variables': {
         'target%': '<!(node -e "console.log(process.versions.node)")', # Set the target variable only if it is not passed in by prebuild 
       },
-      'cflags!': [ '-fno-exceptions' ],
-      'clags_cc!': [ '-fno-exceptions' ],
+      'cflags': [ '-fexceptions' ],
+      'clags_cc': [ '-fexceptions' ],
       'sources': [
         'src/QueryOperationParams.cpp',
         'src/MutateJS.cpp',
