@@ -21,7 +21,8 @@
 #include <BoundDatumHelper.h>
 #include <string.h>
 #include <locale>
-#include <codecvt>
+/* #include <codecvt> */
+#include <boost/locale/encoding_utf.hpp>
 #include <iostream>
 
 namespace mssql
@@ -54,15 +55,25 @@ namespace mssql
 	}
 
 	string w2sqlc(const wstring & s) {
+		/*
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 		auto c_cs = converter.to_bytes(s);
+		*/
+		using boost::locale::conv::utf_to_utf;
+		auto c_cs = utf_to_utf<wchar_t>(s.c_str(), s.c_str() + s.size());
+		
 		return c_cs;	
 	}
 
 	wstring s2ws(const string & s) {
+		/*
 		using convert_type = codecvt_utf8<wchar_t>;
 		wstring_convert<convert_type, wchar_t> converter;
 		auto c_cs = converter.from_bytes(s);
+		*/
+		using boost::locale::conv::utf_to_utf;
+    		auto c_cs = utf_to_utf<wchar_t>(s.c_str(), s.c_str() + s.size());	
+		
 		const auto m = wstring(c_cs);
 		return m;	
 	}
