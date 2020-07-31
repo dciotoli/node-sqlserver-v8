@@ -1265,7 +1265,7 @@ namespace mssql
 				if (_isnan(d) || !_finite(d))
 				#endif
 				#ifdef LINUX_BUILD
-				if (isnan(d) || !finite(d))
+				if (std::isnan(d) || !finite(d))
 				#endif
 				{
 					err = const_cast<char*>("Invalid number parameter");
