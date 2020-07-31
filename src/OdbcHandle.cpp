@@ -20,7 +20,7 @@
 #include <OdbcHandle.h>
 #include "stdafx.h"
 #include <locale>
-#include <codecvt>
+/* #include <codecvt> */
 #include <set>
 #include <iostream>
 
