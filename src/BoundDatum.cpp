@@ -1,9 +1,10 @@
 #include <TimestampColumn.h>
 #include <BoundDatum.h>
 #include <MutateJS.h>
-#include <codecvt>
+/* #include <codecvt> */
 #include <locale>
 #include <string.h>
+#include <boost/locale/encoding_utf.hpp>
 
 namespace mssql
 {
@@ -424,19 +425,22 @@ namespace mssql
 
 	wstring wide_from_js_string(const Local<String> s)
 	{
+		using boost::locale::conv::utf_to_utf;
 		const nodeTypeFactory fact;
-		wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
+		/* wstring_convert<codecvt_utf8_utf16<wchar_t>> converter; */
 		char tmp[1 * 1024];	
 		const auto precision = min(1024, s->Length() + 1);
 		s->WriteUtf8(fact.isolate, tmp, precision);
 		const string narrow(tmp);
-		auto wide = converter.from_bytes(narrow);
+		/* auto wide = converter.from_bytes(narrow); */
+		auto wide = utf_to_utf<wchar_t>(narrow.c_str(), narrow.c_str() + narrow.size());
 		return wide;
 	}
 
 	void BoundDatum::bind_tvp(Local<Value>& p)
 	{
-		wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
+		/* wstring_convert<codecvt_utf8_utf16<wchar_t>> converter; */
+		using boost::locale::conv::utf_to_utf;
 		// string narrow = converter.to_bytes(wide_utf16_source_string);
 		// fprintf(stderr, "bind tvp\n");
 		is_tvp = true;
@@ -458,7 +462,7 @@ namespace mssql
 		auto* itr_p = _storage->charvec_ptr->data();
 		type_id_str->WriteUtf8(fact.isolate, itr_p, precision);
 		const string narrow = _storage->charvec_ptr->data();
-		auto type_name = converter.from_bytes(narrow);
+		auto type_name = utf_to_utf<wchar_t>(narrow.c_str(), narrow.c_str() + narrow.size());
 		auto type_name_vec = wstr2wcvec(type_name);
 		memcpy(static_cast<void*>(_storage->uint16vec_ptr->data()), type_name_vec.data(), precision * sizeof(uint16_t));
 		buffer = _storage->uint16vec_ptr->data();
